@@ -11,14 +11,12 @@ import numpy as np
 import csv
 import sys
 
-reload(sys)
-sys.setdefaultencoding('gbk')
-
 def set_params():
     global headers_list,url_list,csv_writer
     url_list = []
     csv_file = open("D:\my_documents\python\scrape\house_price\leju\house.csv","wb")
     csv_writer = csv.writer(csv_file, delimiter=',')
+#  previously stored links to houses in link.txt
     file = open('D:\\my_documents\\python\\scrape\\house_price\\leju\\link.txt')
     obj = file.read().replace('http',' http')
     obj = obj.split()
@@ -131,8 +129,7 @@ def get_obj():
             company = company[1].a.get_text().strip()
         except:
             company = None
-
-        
+            
         try:
             community_name = soup.find('div',{'class':'basic_info_in'}).find('h4').get_text()
         except:
@@ -197,17 +194,7 @@ def get_obj():
             plot_ratio = right_part[4].em.get_text()
         except:
             plot_ratio = None
-
-
-        #print title,'\n',update_time,'\n',total_price,'\n',unit_price,'\n',house_type,'\n',propriety
-        #print area,'\n',inner_type,'\n',level,'\n',decoration,'\n',direction,'\n',wuye_fee,'\n',block,'\n',address
-
-        #print tag,'\n',agent,'\n',company
-
-        # print community_name,'\n',community_city,'\n',community_district,'\n',community_address
-        # print type_distribution,'\n',price_distribution
-        # print year,'\n',builder,'\n',management,'\n',total_square,'\n',num_family,'\n',num_parking_space,'\n',greenery,'\n',plot_ratio
-      
+            
         features= [title,update_time,total_price,unit_price,house_type,propriety,area,inner_type,level,decoration,direction,wuye_fee,block,address]
         features += [community_name,community_city,community_district,community_address,type_distribution,price_distribution]
         features += [year,builder,management,total_square,num_family,num_parking_space,greenery,plot_ratio]
@@ -218,5 +205,3 @@ def get_obj():
 if __name__=='__main__':
 
     set_params()
-
-#execfile('D:\\my_documents\\python\\scrape\house_price\leju\\house_spider.py')
