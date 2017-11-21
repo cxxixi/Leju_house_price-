@@ -11,17 +11,14 @@ import matplotlib.pyplot as plt
 from time import strptime
 from chardet import detect
 
-# reload(sys)
-# sys.setdefaultencoding('utf8')
-
-### year 没清理
-
+#import data and assign names to columns
 df = pd.read_csv('D:\my_documents\python\scrape\house_price\leju\house\\house1_utf8.csv',encoding='utf8',error_bad_lines=False,nrows=2950)
 columns = ['index','title','update_time','total_price','unit_price','house_type','propriety','area','inner_type','level','decoration']
 columns +=['direction','management_fee','block','address','community_name','community_city','community_district','community_address']
 columns +=['type_distribution','price_distribution','year','builder','management','total_square','num_family','num_parking_space','greenery','plot_ratio']
 df.columns = columns
 
+#since I used several devices to scrape data, there are 20 files. Need to concatenate these files.
 for i in xrange(2,20):
     # try:
     path = 'D:\my_documents\python\\scrape\house_price\leju\house\\house'+str(i)+'_utf8.csv'
@@ -29,25 +26,23 @@ for i in xrange(2,20):
     df1.columns = columns
     df = pd.concat([df,df1])
     print i
-    # except:
-    #     continue
 
-##去重（去重的了完全一样的数据，但是留下了标题相同，内部数据有微小变化的数据）
+##drop duplicates
 df =  df.drop(['index'],axis=1)
 df = df.drop_duplicates()
 # titleset = np.unique(np.array(df.title.values))
 # print len(titleset)
 
-#update_time
+#drop update_time
 df =  df.drop(['update_time'],axis=1)
 
-#清理4unit_price
+#clean 'unit_price'
 unit_price = df.unit_price.values
 for i in range(len(unit_price)):
     unit_price[i]= unit_price[i][3:-5]
 df.unit_price = unit_price
 
-#清理5house_type
+#clean house_type
 house_type = df.house_type.values
 for i in range(len(house_type)):
 	house_type[i] = house_type[i][3:].strip()
@@ -58,7 +53,7 @@ for i in np.arange(len(house_type_set)):
 	df.house_type[df.house_type==house_type_set[i]] = i+1
 df.house_type[df.house_type==u'暂无'] = None
 
-#清理6propriety
+# clean propriety
 propriety = df.propriety.values
 for i in range(len(propriety)):
     propriety[i]= propriety[i][3:].strip()
@@ -71,13 +66,13 @@ for i in np.arange(len(propriety_set)):
 for feature in none_feature:
     df.propriety[df.propriety == feature] = None
 
-#7area 
+#clean area 
 area = df.area.values
 for i in range(len(area)):
     area[i]= area[i][3:-2].strip()
 df.area = area
 
-# 8 inner_type 
+# clean inner_type 
 inner_type = df.inner_type.values
 num_bedroom = df.inner_type.values.copy()
 num_livingroom = df.inner_type.values.copy()
@@ -104,7 +99,7 @@ df['num_livingroom'] = num_livingroom
 df['num_bathroom'] = num_bathroom 
 df = df.drop('inner_type',axis=1)
 
-# 9level
+# clean level
 level = df.level.values
 particular_level = df.level.values.copy()
 total_level = df.level.values.copy()
@@ -134,7 +129,7 @@ df = df.drop(['level'],axis=1)
 df['particular_level'] = particular_level
 df['total_level'] = total_level
 
-# 10decoration
+# clean decoration
 decoration = df.decoration.values
 for i in range(len(decoration)):
     decoration[i]= decoration[i][3:].strip()
@@ -146,7 +141,7 @@ for i in np.arange(len(decoration_set)):
 for feature in none_feature:
     df.decoration[df.decoration == feature] == None
 
-# 11direction
+# direction
 direction = df.direction.values
 for i in range(len(direction)):
     try:
@@ -163,7 +158,7 @@ for i in np.arange(len(direction_set)):
 df.direction[df.direction==u'暂无'] = None
 
 
-# 12 management_fee
+# management_fee
 management_fee = df.management_fee.values
 for i in range(len(management_fee)):
     try:
@@ -174,10 +169,10 @@ for i in range(len(management_fee)):
         management_fee[i] = None
 df.management_fee = management_fee
 
-# # 13 block   (建筑时间和区市的位置可能可分析)
+# block   (建筑时间和区市的位置可能可分析)
 df = df.drop(['block'],axis=1)
 
-# 14address 
+# address 
 address = df.address.values
 for i in range(len(address)):
     try:
@@ -187,7 +182,7 @@ for i in range(len(address)):
 address[address==u'暂无'] = None    
 df.address = address
 
-# 15 community_name
+#community_name
 community_name = df.community_name.values
 for i in range(len(community_name)):
     try:
@@ -199,8 +194,7 @@ df.community_name = community_name
 # 18
 df = df.drop(['community_address'],axis=1)
 
-#19 type_distribution
-#!!如果不用copy（）返回的是原来的视图！！因此不管之前怎么操作room1-5，最后都只会返回room6的值
+# type_distribution
 room1 = df.type_distribution.values.copy()
 room2 = df.type_distribution.values.copy()
 room3 = df.type_distribution.values.copy()
@@ -369,6 +363,3 @@ df.plot_ratio = plot_ratio
 
 #df = df.dropna(thresh=30)
 df.to_csv('D:\my_documents\python\scrape\house_price\leju\house_info.csv',encoding='gbk')
-
-
-#execfile('D:\my_documents\python\scrape\house_price\leju\data_cleaning.py')
