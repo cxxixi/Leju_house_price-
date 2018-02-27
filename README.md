@@ -11,3 +11,12 @@ Env: Python 2.7
 `data_analysis_house.ipynb`: analyse and visualize data  
 `house_info.csv`: data scraped from the website.
 
+## Showcase
+
+![](https://github.com/cxxixi/Leju_house_price-/blob/master/%E6%95%B0%E6%8D%AE/leju1.jpg)
+
+![](https://github.com/cxxixi/Leju_house_price-/blob/master/%E6%95%B0%E6%8D%AE/leju2.jpg)
+
+![](https://github.com/cxxixi/Leju_house_price-/blob/master/%E6%95%B0%E6%8D%AE/leju3.jpg)
+![](https://github.com/cxxixi/Leju_house_price-/blob/master/%E6%95%B0%E6%8D%AE/leju4.jpg)
+![](https://github.com/cxxixi/Leju_house_price-/blob/master/%E6%95%B0%E6%8D%AE/leju5.jpg)
